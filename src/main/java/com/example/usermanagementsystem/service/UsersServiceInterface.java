@@ -8,4 +8,6 @@ public interface UsersServiceInterface {
 
     Users createUsers(Users users);
 
+    List<Users> findAll();
+
 }

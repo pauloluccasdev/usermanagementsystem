@@ -17,4 +17,9 @@ public class UsersService implements UsersServiceInterface {
     public Users createUsers(Users users) {
         return usersRepository.save(users);
     }
+
+    @Override
+    public List<Users> findAll() {
+        return usersRepository.findAll();
+    }
 }

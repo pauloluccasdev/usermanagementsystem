@@ -7,10 +7,9 @@ import com.example.usermanagementsystem.service.DepartamentServiceInterface;
 import com.example.usermanagementsystem.service.UsersServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/users")
@@ -32,5 +31,10 @@ public class UsersController {
         users.setEmail(usersDto.getEmail());
         users.setDepartament(departament);
         return ResponseEntity.ok(usersServiceInterface.createUsers(users));
+    }
+
+    @GetMapping
+    public List<Users> findAll() {
+        return usersServiceInterface.findAll();
     }
 }
