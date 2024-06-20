@@ -41,4 +41,9 @@ public class UsersService implements UsersServiceInterface {
         }
         return null;
     }
+
+    @Override
+    public void deleteUsers(Long id) {
+        usersRepository.deleteById(id);
+    }
 }

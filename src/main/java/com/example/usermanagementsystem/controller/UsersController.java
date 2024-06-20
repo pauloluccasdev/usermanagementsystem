@@ -61,4 +61,10 @@ public class UsersController {
         }
         return ResponseEntity.notFound().build();
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteUsers(@PathVariable Long id) {
+        usersServiceInterface.deleteUsers(id);
+        return ResponseEntity.noContent().build();
+    }
 }

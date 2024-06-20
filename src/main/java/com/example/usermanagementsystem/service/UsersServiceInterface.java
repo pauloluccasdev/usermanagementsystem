@@ -15,4 +15,6 @@ public interface UsersServiceInterface {
 
     Users updateUsers(Long id, Users users);
 
+    void deleteUsers(Long id);
+
 }
