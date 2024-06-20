@@ -3,7 +3,7 @@ package com.example.usermanagementsystem.controller;
 import com.example.usermanagementsystem.DTO.UsersDto;
 import com.example.usermanagementsystem.entity.Departament;
 import com.example.usermanagementsystem.entity.Users;
-import com.example.usermanagementsystem.service.DepartamentServiceInterface;
+import com.example.usermanagementsystem.service.DepartmentServiceInterface;
 import com.example.usermanagementsystem.service.UsersServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -19,17 +19,17 @@ public class UsersController {
     private UsersServiceInterface usersServiceInterface;
 
     @Autowired
-    private DepartamentServiceInterface departamentServiceInterface;
+    private DepartmentServiceInterface departmentServiceInterface;
 
     @PostMapping
     public ResponseEntity<Users> createUsers(@RequestBody UsersDto usersDto) {
-        Departament departament = departamentServiceInterface.findById(usersDto.getDepartamentoId())
-                .orElseThrow(() -> new RuntimeException("Departamento não encontrado."));
+        Departament department = departmentServiceInterface.findById(usersDto.getDepartamentoId())
+                    .orElseThrow(() -> new RuntimeException("Department not found."));
 
         Users users = new Users();
         users.setName(usersDto.getName());
         users.setEmail(usersDto.getEmail());
-        users.setDepartament(departament);
+        users.setDepartament(department);
         return ResponseEntity.ok(usersServiceInterface.createUsers(users));
     }
 
@@ -47,13 +47,13 @@ public class UsersController {
 
     @PutMapping("/{id}")
     public ResponseEntity<Users> updateUsers(@PathVariable Long id, @RequestBody UsersDto usersDto) {
-        Departament departament = departamentServiceInterface.findById(usersDto.getDepartamentoId())
-                .orElseThrow(() -> new RuntimeException("Departamento não encontrado."));
+        Departament department = departmentServiceInterface.findById(usersDto.getDepartamentoId())
+                .orElseThrow(() -> new RuntimeException("Department not found."));
 
         Users users = new Users();
         users.setName(usersDto.getName());
         users.setEmail(usersDto.getEmail());
-        users.setDepartament(departament);
+        users.setDepartament(department);
 
         Users usersUpdated = usersServiceInterface.updateUsers(id, users);
         if (usersUpdated != null) {

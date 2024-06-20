@@ -14,7 +14,7 @@ public class Users {
 
     @ManyToOne
     @JoinColumn(name = "departament_id")
-    private Departament departament;
+    private Departament department;
 
     public Long getId() {
         return id;
@@ -41,10 +41,10 @@ public class Users {
     }
 
     public Departament getDepartament() {
-        return departament;
+        return department;
     }
 
-    public void setDepartament(Departament departament) {
-        this.departament = departament;
+    public void setDepartament(Departament department) {
+        this.department = department;
     }
 }
