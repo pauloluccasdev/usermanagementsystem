@@ -13,9 +13,6 @@ public class Departament {
 
     private String name;
 
-    @OneToMany(mappedBy = "departament")
-    private Set<Users> user;
-
     public Long getId() {
         return id;
     }
@@ -30,13 +27,5 @@ public class Departament {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public Set<Users> getUser() {
-        return user;
-    }
-
-    public void setUser(Set<Users> user) {
-        this.user = user;
     }
 }
