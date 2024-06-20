@@ -1,6 +1,7 @@
 package com.example.usermanagementsystem.service;
 
 import com.example.usermanagementsystem.entity.Departament;
+import com.example.usermanagementsystem.exceptions.DepartmentException;
 import com.example.usermanagementsystem.repository.DepartmentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,21 +18,37 @@ public class DepartmentService implements DepartmentServiceInterface {
 
     @Override
     public Optional<Departament> findById(Long id) {
-        return departamentRepository.findById(id);
+        try {
+            return departamentRepository.findById(id);
+        } catch (DepartmentException e) {
+            throw new DepartmentException(e.getMessage());
+        }
     }
 
     @Override
     public Optional<Departament> findByName(String name) {
-        return departamentRepository.findByName(name);
+        try {
+            return departamentRepository.findByName(name);
+        } catch (DepartmentException e) {
+            throw new DepartmentException(e.getMessage());
+        }
     }
 
     @Override
     public Departament createDepartament(Departament department) {
-        return departamentRepository.save(department);
+        try {
+            return departamentRepository.save(department);
+        } catch (DepartmentException e) {
+            throw new DepartmentException(e.getMessage());
+        }
     }
 
     @Override
     public List<Departament> findAll() {
-        return departamentRepository.findAll();
+        try {
+            return departamentRepository.findAll();
+        } catch (DepartmentException e) {
+            throw new DepartmentException(e.getMessage());
+        }
     }
 }

@@ -3,6 +3,7 @@ package com.example.usermanagementsystem.controller;
 import com.example.usermanagementsystem.DTO.UsersDto;
 import com.example.usermanagementsystem.entity.Departament;
 import com.example.usermanagementsystem.entity.Users;
+import com.example.usermanagementsystem.exceptions.UsersException;
 import com.example.usermanagementsystem.service.DepartmentServiceInterface;
 import com.example.usermanagementsystem.service.UsersServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +25,7 @@ public class UsersController {
     @PostMapping
     public ResponseEntity<Users> createUsers(@RequestBody UsersDto usersDto) {
         Departament department = departmentServiceInterface.findById(usersDto.getDepartamentoId())
-                    .orElseThrow(() -> new RuntimeException("Department not found."));
+                    .orElseThrow(() -> new UsersException("Department not found."));
 
         Users users = new Users();
         users.setName(usersDto.getName());
@@ -48,7 +49,7 @@ public class UsersController {
     @PutMapping("/{id}")
     public ResponseEntity<Users> updateUsers(@PathVariable Long id, @RequestBody UsersDto usersDto) {
         Departament department = departmentServiceInterface.findById(usersDto.getDepartamentoId())
-                .orElseThrow(() -> new RuntimeException("Department not found."));
+                .orElseThrow(() -> new UsersException("Department not found."));
 
         Users users = new Users();
         users.setName(usersDto.getName());

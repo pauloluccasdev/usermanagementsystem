@@ -2,13 +2,12 @@ package com.example.usermanagementsystem.controller;
 
 import com.example.usermanagementsystem.DTO.DepartmentDto;
 import com.example.usermanagementsystem.entity.Departament;
-import com.example.usermanagementsystem.entity.Users;
+import com.example.usermanagementsystem.exceptions.DepartmentException;
 import com.example.usermanagementsystem.service.DepartmentServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.swing.text.html.Option;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,7 +23,7 @@ public class DepartmentController {
         Optional<Departament> departmentExist = departmentServiceInterface.findByName(departmentDto.getName());
 
         if(departmentExist.isPresent()) {
-            throw new RuntimeException("Name for an existing department.");
+            throw new DepartmentException("Name for an existing department.");
         }
 
         Departament newDepartament = new Departament();
