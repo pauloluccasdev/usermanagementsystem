@@ -37,4 +37,11 @@ public class UsersController {
     public List<Users> findAll() {
         return usersServiceInterface.findAll();
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Users> findById(@PathVariable Long id) {
+        return usersServiceInterface.findById(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
 }
