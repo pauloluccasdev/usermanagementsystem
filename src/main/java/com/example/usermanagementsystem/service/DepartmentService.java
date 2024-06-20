@@ -5,6 +5,7 @@ import com.example.usermanagementsystem.repository.DepartmentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 
@@ -27,5 +28,10 @@ public class DepartmentService implements DepartmentServiceInterface {
     @Override
     public Departament createDepartament(Departament department) {
         return departamentRepository.save(department);
+    }
+
+    @Override
+    public List<Departament> findAll() {
+        return departamentRepository.findAll();
     }
 }

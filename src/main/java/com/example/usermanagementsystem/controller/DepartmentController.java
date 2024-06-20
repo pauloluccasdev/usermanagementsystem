@@ -2,15 +2,14 @@ package com.example.usermanagementsystem.controller;
 
 import com.example.usermanagementsystem.DTO.DepartmentDto;
 import com.example.usermanagementsystem.entity.Departament;
+import com.example.usermanagementsystem.entity.Users;
 import com.example.usermanagementsystem.service.DepartmentServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.swing.text.html.Option;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -31,5 +30,10 @@ public class DepartmentController {
         Departament newDepartament = new Departament();
         newDepartament.setName(departmentDto.getName());
         return ResponseEntity.ok(departmentServiceInterface.createDepartament(newDepartament));
+    }
+
+    @GetMapping
+    public List<Departament> findAll() {
+        return departmentServiceInterface.findAll();
     }
 }
