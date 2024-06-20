@@ -28,4 +28,17 @@ public class UsersService implements UsersServiceInterface {
     public Optional<Users> findById(Long id) {
         return usersRepository.findById(id);
     }
+
+    @Override
+    public Users updateUsers(Long id, Users users) {
+        Optional<Users> usersOptional = usersRepository.findById(id);
+        if (usersOptional.isPresent()) {
+            Users usersExist = usersOptional.get();
+            usersExist.setName(users.getName());
+            usersExist.setEmail(users.getEmail());
+            usersExist.setDepartament(users.getDepartament());
+            return usersRepository.save(usersExist);
+        }
+        return null;
+    }
 }

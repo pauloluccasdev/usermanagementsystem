@@ -44,4 +44,21 @@ public class UsersController {
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Users> updateUsers(@PathVariable Long id, @RequestBody UsersDto usersDto) {
+        Departament departament = departamentServiceInterface.findById(usersDto.getDepartamentoId())
+                .orElseThrow(() -> new RuntimeException("Departamento não encontrado."));
+
+        Users users = new Users();
+        users.setName(usersDto.getName());
+        users.setEmail(usersDto.getEmail());
+        users.setDepartament(departament);
+
+        Users usersUpdated = usersServiceInterface.updateUsers(id, users);
+        if (usersUpdated != null) {
+            return ResponseEntity.ok(usersUpdated);
+        }
+        return ResponseEntity.notFound().build();
+    }
 }

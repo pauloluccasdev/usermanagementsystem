@@ -13,4 +13,6 @@ public interface UsersServiceInterface {
 
     Optional<Users> findById(Long id);
 
+    Users updateUsers(Long id, Users users);
+
 }
