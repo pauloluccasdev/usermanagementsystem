@@ -19,7 +19,8 @@ public class DepartmentService implements DepartmentServiceInterface {
     @Override
     public Optional<Departament> findById(Long id) {
         try {
-            return departamentRepository.findById(id);
+            return Optional.ofNullable(departamentRepository.findById(id)
+                    .orElseThrow(() -> new DepartmentException("Department not found with id: " + id)));
         } catch (DepartmentException e) {
             throw new DepartmentException(e.getMessage());
         }
@@ -28,7 +29,8 @@ public class DepartmentService implements DepartmentServiceInterface {
     @Override
     public Optional<Departament> findByName(String name) {
         try {
-            return departamentRepository.findByName(name);
+            return Optional.ofNullable(departamentRepository.findByName(name)
+                    .orElseThrow(() -> new DepartmentException("Department not found with name: " + name)));
         } catch (DepartmentException e) {
             throw new DepartmentException(e.getMessage());
         }
