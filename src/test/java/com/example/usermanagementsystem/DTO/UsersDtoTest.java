@@ -39,11 +39,11 @@ public class UsersDtoTest {
     }
 
     @Test
-    public void testGetDepartamentoId() {
+    public void testgetDepartmentId() {
         UsersDto usersDto = new UsersDto();
         usersDto.setDepartamentoId(1L);
 
-        assertEquals(1L, usersDto.getDepartamentoId());
+        assertEquals(1L, usersDto.getDepartmentId());
     }
 
     @Test
@@ -51,6 +51,6 @@ public class UsersDtoTest {
         UsersDto usersDto = new UsersDto();
         usersDto.setDepartamentoId(2L);
 
-        assertEquals(2L, usersDto.getDepartamentoId());
+        assertEquals(2L, usersDto.getDepartmentId());
     }
 }

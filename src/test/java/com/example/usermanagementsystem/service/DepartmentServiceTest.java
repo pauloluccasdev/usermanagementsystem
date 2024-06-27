@@ -61,7 +61,7 @@ public class DepartmentServiceTest {
         department.setName(name);
         when(departmentRepository.findByName(name)).thenReturn(Optional.of(department));
 
-        Optional<Departament> result = departmentService.findByName(name);
+        Optional<Departament> result = Optional.ofNullable(departmentService.findByName(name));
 
         assertTrue(result.isPresent());
         assertEquals(name, result.get().getName());

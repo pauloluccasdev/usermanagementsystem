@@ -1,6 +1,7 @@
 package com.example.usermanagementsystem.controller;
 
 import com.example.usermanagementsystem.DTO.UsersDto;
+import com.example.usermanagementsystem.DTO.UsersResponseDto;
 import com.example.usermanagementsystem.entity.Departament;
 import com.example.usermanagementsystem.entity.Users;
 import com.example.usermanagementsystem.exceptions.UsersException;
@@ -42,7 +43,7 @@ public class UsersControllerTest {
         UsersDto usersDto = new UsersDto();
         usersDto.setName("User Test");
         usersDto.setEmail("user.test@example.com");
-        usersDto.setDepartamentoId(1L);
+        usersDto.setDepartmentId(1L);
 
         Departament department = new Departament();
         department.setId(1L);
@@ -71,7 +72,7 @@ public class UsersControllerTest {
         UsersDto usersDto = new UsersDto();
         usersDto.setName("User Test");
         usersDto.setEmail("user.test@example.com");
-        usersDto.setDepartamentoId(1L);
+        usersDto.setDepartmentId(1L);
 
         when(departmentServiceInterface.findById(1L)).thenReturn(Optional.empty());
 
@@ -105,11 +106,11 @@ public class UsersControllerTest {
 
         when(usersServiceInterface.findById(1L)).thenReturn(Optional.of(user));
 
-        ResponseEntity<Users> responseEntity = usersController.findById(1L);
+        ResponseEntity<UsersResponseDto> responseEntity = usersController.findById(1L);
 
         assertNotNull(responseEntity);
         assertEquals(200, responseEntity.getStatusCodeValue());
-        assertEquals(1L, responseEntity.getBody().getId());
+        assertEquals(1L, responseEntity.getBody().getName());
 
         verify(usersServiceInterface, times(1)).findById(1L);
     }
@@ -118,7 +119,7 @@ public class UsersControllerTest {
     public void testFindById_WhenUserNotExists() {
         when(usersServiceInterface.findById(1L)).thenReturn(Optional.empty());
 
-        ResponseEntity<Users> responseEntity = usersController.findById(1L);
+        ResponseEntity<UsersResponseDto> responseEntity = usersController.findById(1L);
 
         assertNotNull(responseEntity);
         assertEquals(404, responseEntity.getStatusCodeValue());
@@ -131,7 +132,7 @@ public class UsersControllerTest {
         UsersDto usersDto = new UsersDto();
         usersDto.setName("User Test Updated");
         usersDto.setEmail("user.test.updated@example.com");
-        usersDto.setDepartamentoId(1L);
+        usersDto.setDepartmentId(1L);
 
         Departament department = new Departament();
         department.setId(1L);
@@ -160,7 +161,7 @@ public class UsersControllerTest {
         UsersDto usersDto = new UsersDto();
         usersDto.setName("User Test Updated");
         usersDto.setEmail("user.test.updated@example.com");
-        usersDto.setDepartamentoId(1L);
+        usersDto.setDepartmentId(1L);
 
         when(departmentServiceInterface.findById(1L)).thenReturn(Optional.empty());
 
