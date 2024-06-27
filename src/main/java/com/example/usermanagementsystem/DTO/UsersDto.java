@@ -3,7 +3,7 @@ package com.example.usermanagementsystem.DTO;
 public class UsersDto {
     private String name;
     private String email;
-    private Long departamentoId;
+    private Long departmentId;
 
     public String getName() {
         return name;
@@ -13,12 +13,12 @@ public class UsersDto {
         this.name = name;
     }
 
-    public Long getDepartamentoId() {
-        return departamentoId;
+    public Long getDepartmentId() {
+        return departmentId;
     }
 
-    public void setDepartamentoId(Long departamentoId) {
-        this.departamentoId = departamentoId;
+    public void setDepartmentId(Long departmentId) {
+        this.departmentId = departmentId;
     }
 
     public String getEmail() {
