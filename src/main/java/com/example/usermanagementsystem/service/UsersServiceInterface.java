@@ -17,4 +17,6 @@ public interface UsersServiceInterface {
 
     void deleteUsers(Long id);
 
+    List<Users> findByDepartmentId(Long departmentId);
+
 }

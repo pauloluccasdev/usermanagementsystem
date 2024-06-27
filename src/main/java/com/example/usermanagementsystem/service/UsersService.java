@@ -67,4 +67,13 @@ public class UsersService implements UsersServiceInterface {
             throw new UsersException(e.getMessage());
         }
     }
+
+    @Override
+    public List<Users> findByDepartmentId(Long departmentId) {
+        try {
+            return usersRepository.findByDepartmentId(departmentId);
+        } catch (UsersException e) {
+            throw new UsersException(e.getMessage());
+        }
+    }
 }

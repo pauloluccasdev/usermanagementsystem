@@ -66,4 +66,13 @@ public class DepartmentService implements DepartmentServiceInterface {
             throw new DepartmentException(e.getMessage());
         }
     }
+
+    @Override
+    public void deleteDepartment(Long id) {
+        try {
+            departamentRepository.deleteById(id);
+        } catch (DepartmentException e) {
+            throw new DepartmentException(e.getMessage());
+        }
+    }
 }

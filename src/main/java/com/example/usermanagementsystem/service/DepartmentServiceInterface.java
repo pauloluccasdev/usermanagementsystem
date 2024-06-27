@@ -18,4 +18,6 @@ public interface DepartmentServiceInterface {
     List<Departament> findAll();
 
     Departament updateDepartment(Long id, Departament department);
+
+    void deleteDepartment(Long id);
 }

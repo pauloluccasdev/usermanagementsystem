@@ -2,8 +2,11 @@ package com.example.usermanagementsystem.controller;
 
 import com.example.usermanagementsystem.DTO.DepartmentDto;
 import com.example.usermanagementsystem.entity.Departament;
+import com.example.usermanagementsystem.entity.Users;
 import com.example.usermanagementsystem.exceptions.DepartmentException;
 import com.example.usermanagementsystem.service.DepartmentServiceInterface;
+import com.example.usermanagementsystem.service.UsersServiceInterface;
+import com.example.usermanagementsystem.utils.ErrorDetails;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +20,9 @@ public class DepartmentController {
 
     @Autowired
     private DepartmentServiceInterface departmentServiceInterface;
+
+    @Autowired
+    private UsersServiceInterface usersServiceInterface;
 
     @PostMapping
     public ResponseEntity<Departament> createDepartament(@RequestBody DepartmentDto departmentDto) {
@@ -62,5 +68,13 @@ public class DepartmentController {
         return ResponseEntity.ok(departmentDto);
     }
 
-
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteDepartment(@PathVariable Long id) {
+        List<Users> users = usersServiceInterface.findByDepartmentId(id);
+        if(!users.isEmpty()) {
+            throw new DepartmentException("Departamento vinculado há um cliente.");
+        }
+        departmentServiceInterface.deleteDepartment(id);
+        return ResponseEntity.noContent().build();
+    }
 }
