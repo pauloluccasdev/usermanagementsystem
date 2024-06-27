@@ -36,8 +36,6 @@ public class DepartmentController {
         return departmentServiceInterface.findAll();
     }
 
-
-
     @PutMapping("/{id}")
     public ResponseEntity<Departament> updateDepartment(@PathVariable Long id, @RequestBody DepartmentDto departmentDto) {
 
@@ -51,4 +49,18 @@ public class DepartmentController {
         }
         return ResponseEntity.notFound().build();
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<DepartmentDto> findById(@PathVariable Long id) {
+        Departament departament = departmentServiceInterface.findById(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build()).getBody();
+
+        DepartmentDto departmentDto = new DepartmentDto();
+        departmentDto.setName(departament.getName());
+
+        return ResponseEntity.ok(departmentDto);
+    }
+
+
 }
