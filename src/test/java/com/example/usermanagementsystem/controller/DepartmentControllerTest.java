@@ -2,8 +2,10 @@ package com.example.usermanagementsystem.controller;
 
 import com.example.usermanagementsystem.DTO.DepartmentDto;
 import com.example.usermanagementsystem.entity.Departament;
+import com.example.usermanagementsystem.entity.Users;
 import com.example.usermanagementsystem.exceptions.DepartmentException;
 import com.example.usermanagementsystem.service.DepartmentServiceInterface;
+import com.example.usermanagementsystem.service.UsersServiceInterface;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -12,6 +14,7 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.http.ResponseEntity;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,6 +29,9 @@ public class DepartmentControllerTest {
 
     @Mock
     private DepartmentServiceInterface departmentServiceInterface;
+
+    @Mock
+    private UsersServiceInterface usersServiceInterface;
 
     @BeforeEach
     public void setUp() {
@@ -82,5 +88,90 @@ public class DepartmentControllerTest {
 
         assertEquals(2, result.size());
         verify(departmentServiceInterface, times(1)).findAll();
+    }
+
+    @Test
+    public void testUpdateDepartment_Success() {
+        Long id = 1L;
+        DepartmentDto departmentDto = new DepartmentDto();
+        departmentDto.setName("Updated Department");
+
+        Departament department = new Departament();
+        department.setId(id);
+        department.setName(departmentDto.getName());
+
+        when(departmentServiceInterface.updateDepartment(eq(id), any(Departament.class))).thenReturn(department);
+
+        ResponseEntity<Departament> response = departmentController.updateDepartment(id, departmentDto);
+
+        assertEquals(200, response.getStatusCodeValue());
+        assertEquals(departmentDto.getName(), response.getBody().getName());
+    }
+
+    @Test
+    public void testUpdateDepartment_NotFound() {
+        Long id = 1L;
+        DepartmentDto departmentDto = new DepartmentDto();
+        departmentDto.setName("Updated Department");
+
+        when(departmentServiceInterface.updateDepartment(eq(id), any(Departament.class))).thenReturn(null);
+
+        ResponseEntity<Departament> response = departmentController.updateDepartment(id, departmentDto);
+
+        assertEquals(404, response.getStatusCodeValue());
+    }
+
+    @Test
+    public void testFindById_Success() {
+        Long id = 1L;
+        Departament department = new Departament();
+        department.setId(id);
+        department.setName("Test Department");
+
+        when(departmentServiceInterface.findById(id)).thenReturn(Optional.of(department));
+
+        ResponseEntity<DepartmentDto> response = departmentController.findById(id);
+
+        assertEquals(200, response.getStatusCodeValue());
+        assertEquals(department.getName(), response.getBody().getName());
+    }
+
+    @Test
+    public void testFindById_NotFound() {
+        Long id = 1L;
+
+        when(departmentServiceInterface.findById(id)).thenReturn(Optional.empty());
+
+        ResponseEntity<DepartmentDto> response = departmentController.findById(id);
+
+        assertEquals(404, response.getStatusCodeValue());
+    }
+
+    @Test
+    public void testDeleteDepartment_Success() {
+        Long id = 1L;
+
+        when(usersServiceInterface.findByDepartmentId(id)).thenReturn(Collections.emptyList());
+
+        ResponseEntity<?> response = departmentController.deleteDepartment(id);
+
+        verify(departmentServiceInterface, times(1)).deleteDepartment(id);
+        assertEquals(204, response.getStatusCodeValue());
+    }
+
+    @Test
+    public void testDeleteDepartment_DepartmentHasUsers() {
+        Long id = 1L;
+        Users user = new Users();
+        user.setId(1L);
+
+        when(usersServiceInterface.findByDepartmentId(id)).thenReturn(List.of(user));
+
+        DepartmentException exception = assertThrows(DepartmentException.class, () -> {
+            departmentController.deleteDepartment(id);
+        });
+
+        assertEquals("Departamento vinculado há um cliente.", exception.getMessage());
+        verify(departmentServiceInterface, never()).deleteDepartment(id);
     }
 }

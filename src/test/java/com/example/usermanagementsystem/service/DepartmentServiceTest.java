@@ -5,17 +5,19 @@ import com.example.usermanagementsystem.exceptions.DepartmentException;
 import com.example.usermanagementsystem.repository.DepartmentRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+@ExtendWith(MockitoExtension.class)
 public class DepartmentServiceTest {
 
     @Mock
@@ -24,77 +26,119 @@ public class DepartmentServiceTest {
     @InjectMocks
     private DepartmentService departmentService;
 
+    private Departament department;
+
     @BeforeEach
     public void setUp() {
-        MockitoAnnotations.openMocks(this);
+        department = new Departament();
+        department.setId(1L);
+        department.setName("Finance");
     }
 
     @Test
-    public void findById_Success() {
+    public void testFindById_Success() {
         Long id = 1L;
-        Departament department = new Departament();
-        department.setId(id);
         when(departmentRepository.findById(id)).thenReturn(Optional.of(department));
 
-        Optional<Departament> result = departmentService.findById(id);
+        Optional<Departament> foundDepartment = departmentService.findById(id);
 
-        assertTrue(result.isPresent());
-        assertEquals(id, result.get().getId());
+        assertTrue(foundDepartment.isPresent());
+        assertEquals(department, foundDepartment.get());
     }
 
-
     @Test
-    public void findById_NotFound() {
+    public void testFindById_ThrowsDepartmentException() {
         Long id = 1L;
-        when(departmentRepository.findById(id)).thenReturn(Optional.empty());
+        when(departmentRepository.findById(id)).thenThrow(new DepartmentException("Error fetching department"));
 
-        DepartmentException exception = assertThrows(DepartmentException.class, () -> departmentService.findById(id));
-        assertEquals("Department not found with id: 1", exception.getMessage());
+        assertThrows(DepartmentException.class, () -> departmentService.findById(id));
     }
 
-
-
     @Test
-    public void findByName_Success() {
+    public void testFindByName_Success() {
         String name = "Finance";
-        Departament department = new Departament();
-        department.setName(name);
         when(departmentRepository.findByName(name)).thenReturn(Optional.of(department));
 
-        Optional<Departament> result = Optional.ofNullable(departmentService.findByName(name));
+        Optional<Departament> foundDepartment = departmentService.findByName(name);
 
-        assertTrue(result.isPresent());
-        assertEquals(name, result.get().getName());
+        assertTrue(foundDepartment.isPresent());
+        assertEquals(department, foundDepartment.get());
     }
 
     @Test
-    public void findByName_NotFound() {
+    public void testFindByName_ThrowsDepartmentException() {
         String name = "Finance";
-        when(departmentRepository.findByName(name)).thenReturn(Optional.empty());
+        when(departmentRepository.findByName(name)).thenThrow(new DepartmentException("Error fetching department"));
 
         assertThrows(DepartmentException.class, () -> departmentService.findByName(name));
     }
 
     @Test
-    public void createDepartament_Success() {
-        Departament department = new Departament();
+    public void testCreateDepartament_Success() {
         when(departmentRepository.save(department)).thenReturn(department);
 
-        Departament result = departmentService.createDepartament(department);
+        Departament createdDepartment = departmentService.createDepartament(department);
 
-        assertNotNull(result);
-        assertEquals(department, result);
+        assertEquals(department, createdDepartment);
     }
 
     @Test
-    public void findAll_Success() {
-        List<Departament> departments = new ArrayList<>();
-        departments.add(new Departament());
+    public void testCreateDepartament_ThrowsDepartmentException() {
+        when(departmentRepository.save(department)).thenThrow(new DepartmentException("Error saving department"));
+
+        assertThrows(DepartmentException.class, () -> departmentService.createDepartament(department));
+    }
+
+    @Test
+    public void testFindAll_Success() {
+        List<Departament> departments = Arrays.asList(department);
         when(departmentRepository.findAll()).thenReturn(departments);
 
-        List<Departament> result = departmentService.findAll();
+        List<Departament> foundDepartments = departmentService.findAll();
 
-        assertNotNull(result);
-        assertEquals(departments.size(), result.size());
+        assertEquals(departments, foundDepartments);
+    }
+
+    @Test
+    public void testFindAll_ThrowsDepartmentException() {
+        when(departmentRepository.findAll()).thenThrow(new DepartmentException("Error fetching departments"));
+
+        assertThrows(DepartmentException.class, () -> departmentService.findAll());
+    }
+
+    @Test
+    public void testUpdateDepartment_Success() {
+        Long id = 1L;
+        when(departmentRepository.findById(id)).thenReturn(Optional.of(department));
+        when(departmentRepository.save(department)).thenReturn(department);
+
+        Departament updatedDepartment = departmentService.updateDepartment(id, department);
+
+        assertEquals(department, updatedDepartment);
+    }
+
+    @Test
+    public void testUpdateDepartment_ThrowsDepartmentException() {
+        Long id = 1L;
+        when(departmentRepository.findById(id)).thenThrow(new DepartmentException("Error fetching department"));
+
+        assertThrows(DepartmentException.class, () -> departmentService.updateDepartment(id, department));
+    }
+
+    @Test
+    public void testDeleteDepartment_Success() {
+        Long id = 1L;
+
+        departmentService.deleteDepartment(id);
+
+        verify(departmentRepository, times(1)).deleteById(id);
+    }
+
+    @Test
+    public void testDeleteDepartment_ThrowsDepartmentException() {
+        Long id = 1L;
+        doThrow(new DepartmentException("Error deleting department")).when(departmentRepository).deleteById(id);
+
+        assertThrows(DepartmentException.class, () -> departmentService.deleteDepartment(id));
     }
 }

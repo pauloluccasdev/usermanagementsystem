@@ -11,6 +11,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -177,5 +178,35 @@ public class UsersServiceTest {
 
         UsersException exception = assertThrows(UsersException.class, () -> usersService.deleteUsers(id));
         assertEquals("Error deleting user", exception.getMessage());
+    }
+
+    @Test
+    public void testFindByDepartmentId_Success() {
+        Long departmentId = 1L;
+        Users users1 = new Users();
+        users1.setName("User Test");
+        users1.setEmail("user.test@example.com");
+
+        Users users2 = new Users();
+        users2.setName("User Test");
+        users2.setEmail("user.test@example.com");
+
+
+        List<Users> expectedUsers = Arrays.asList(users1, users2);
+
+        when(usersRepository.findByDepartmentId(departmentId)).thenReturn(expectedUsers);
+
+        List<Users> actualUsers = usersService.findByDepartmentId(departmentId);
+
+        assertEquals(expectedUsers, actualUsers);
+    }
+
+    @Test
+    public void testFindByDepartmentId_ThrowsUsersException() {
+        Long departmentId = 1L;
+
+        when(usersRepository.findByDepartmentId(departmentId)).thenThrow(new UsersException("Error fetching users"));
+
+        assertThrows(UsersException.class, () -> usersService.findByDepartmentId(departmentId));
     }
 }
