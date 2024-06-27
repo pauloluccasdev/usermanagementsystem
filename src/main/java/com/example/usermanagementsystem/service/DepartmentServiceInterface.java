@@ -16,4 +16,6 @@ public interface DepartmentServiceInterface {
     Departament createDepartament(Departament department);
 
     List<Departament> findAll();
+
+    Departament updateDepartment(Long id, Departament department);
 }

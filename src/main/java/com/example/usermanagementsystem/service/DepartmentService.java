@@ -51,4 +51,19 @@ public class DepartmentService implements DepartmentServiceInterface {
             throw new DepartmentException(e.getMessage());
         }
     }
+
+    @Override
+    public Departament updateDepartment(Long id, Departament department) {
+        try {
+            Optional<Departament> departmentOptional = departamentRepository.findById(id);
+            if (departmentOptional.isPresent()) {
+                Departament departmentExist = departmentOptional.get();
+                departmentExist.setName(department.getName());
+                return departamentRepository.save(departmentExist);
+            }
+            return null;
+        } catch (DepartmentException e) {
+            throw new DepartmentException(e.getMessage());
+        }
+    }
 }
